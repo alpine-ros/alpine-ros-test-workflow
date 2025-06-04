@@ -117,7 +117,6 @@ jobs:
             unset GITHUB_API_URL_BASE
           fi
 
-          build_link="[${GITHUB_RUN_NUMBER}](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})"
           title=
           case "${{ steps.test.conclusion }}" in
             success)
@@ -130,8 +129,10 @@ jobs:
               title=":x: Failed"
               ;;
           esac
-          gh-pr-comment "${title} ${ROS_DISTRO} ${ALPINE_VERSION} [${build_link}]" \
+          gh-pr-comment "${title} ${ROS_DISTRO} ${ALPINE_VERSION}" \
             "<details><summary>Log summary</summary>
+
+          - [Action Run Summary](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID})
 
           $(cat ${BUILD_LOG_DIR}/summary.log)
           </details>
