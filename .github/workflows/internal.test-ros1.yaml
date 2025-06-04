@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   test:
-    uses: ./.github/workflows/ros1.yml
+    uses: ./.github/workflows/ros1.yaml
     with:
       enable-bot-comment: true
       repository: alpine-ros/sample-ros-pkg
