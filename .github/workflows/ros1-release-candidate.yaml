@@ -1,9 +1,4 @@
-# This workflow creates release candidate PR which updates CHANGELOG.rst and package.xml by opening an issue.
-# The workflow is intended to be called by the following condition:
-#
-# on:
-#   issues:
-#     types: [opened, reopened, edited]
+# Create release candidate PR which updates CHANGELOG.rst and package.xml.
 
 name: ROS 1 package release candidate workflow
   workflow_call:

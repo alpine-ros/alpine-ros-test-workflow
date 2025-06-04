@@ -1,4 +1,4 @@
-# This workflow detects version update in package.xml and automatically create Git tag and GitHub Release.
+# Detects version update in package.xml and automatically create Git tag and GitHub Release.
 # The workflow must be called by the following condition:
 #
 # on:
