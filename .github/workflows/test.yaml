@@ -3,25 +3,25 @@ on:
   workflow_call:
     inputs:
       ros-distro:
+        type: string
         required: true
         default: noetic
-        type: string
       alpine-version:
+        type: string
         required: true
         default: "3.20"
-        type: string
       enable-bot-comment:
+        type: boolean
         required: true
         default: false
-        type: boolean
       bot-comment-api-base:
-        required: true
-        required: false
         type: string
-      enable-codecov:
         required: true
         default: false
+      enable-codecov:
         type: boolean
+        required: true
+        default: false
     secrets:
       bot-comment-token:
         required: false
