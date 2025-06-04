@@ -253,7 +253,7 @@ jobs:
     steps:
       - name: Escape version string
         id: escaped
-        run: echo 'alpine-version=${{ inputs.alpine-version }}' | sed 's/\./\\\\./' >> ${GITHUB_OUTPUT}
+        run: echo 'alpine-version=${{ inputs.alpine-version }}' | sed 's/\./\\./' >> ${GITHUB_OUTPUT}
       - name: Hide old bot comments
         uses: kamatama41/hide-pr-comments-action@v0
         with:
