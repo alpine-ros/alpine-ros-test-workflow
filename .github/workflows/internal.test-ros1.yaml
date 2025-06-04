@@ -1,0 +1,20 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: read
+  issues: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/ros1.yml
+    with:
+      enable-bot-comment: true
+      repository: alpine-ros/sample-ros-pkg
+    secrets:
+      bot-comment-token: ${{ secrets.GITHUB_TOKEN }}
