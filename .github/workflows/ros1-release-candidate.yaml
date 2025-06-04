@@ -35,7 +35,6 @@ name: ROS 1 package release candidate workflow
 jobs:
   release-candidate:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.issue.title, 'Release ')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
