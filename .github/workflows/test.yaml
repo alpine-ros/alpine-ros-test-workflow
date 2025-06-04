@@ -4,23 +4,18 @@ on:
     inputs:
       ros-distro:
         type: string
-        required: true
         default: noetic
       alpine-version:
         type: string
-        required: true
         default: "3.20"
       enable-bot-comment:
         type: boolean
-        required: true
         default: false
       bot-comment-api-base:
         type: string
-        required: true
         default: false
       enable-codecov:
         type: boolean
-        required: true
         default: false
     secrets:
       bot-comment-token:
