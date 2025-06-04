@@ -13,7 +13,7 @@ jobs:
     uses: ./.github/workflows/alpine-ros1-release.yaml
     with:
       source-repo-slug: alpine-ros/sample-ros-pkg
-      release-ref: 0.0.1
+      release-ref: 0.0.4
       release-repo-slug: alpine-ros/sample-ros-pkg-release
       git-user: alpine-ros-bot
       git-email: 214657941+alpine-ros-bot@users.noreply.github.com
