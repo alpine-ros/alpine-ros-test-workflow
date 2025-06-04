@@ -3,20 +3,33 @@ on:
   workflow_call:
     inputs:
       ros-distro:
+        description: "ROS distribution name"
         type: string
         default: noetic
       alpine-version:
+        description: "Alpine Linux version"
         type: string
         default: "3.20"
       enable-bot-comment:
+        description: "Post test result as a bot comment"
         type: boolean
         default: false
       bot-comment-api-base:
+        description: "GitHub API base URL to post a bot comment"
         type: string
         default: false
       enable-codecov:
+        description: "Upload coverage report to Codecov"
         type: boolean
         default: false
+      repository:
+        description: "Repository slug to checkout. Mainly for internal testing"
+        type: string
+        default: ${{ github.repository }}
+      ref:
+        description: "Repository ref to checkout. Mainly for internal testing"
+        type: string
+        default: ""
     secrets:
       bot-comment-token:
         required: false
@@ -40,6 +53,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.repository }}
+          ref: ${{ inputs.ref }}
 
       - name: Cache cpp build
         id: cache-cpp-build
