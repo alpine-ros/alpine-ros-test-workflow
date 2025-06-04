@@ -46,7 +46,7 @@ env:
 
 jobs:
   test:
-    name: Alpine ROS 1 test / ${{ inputs.ros-distro }}-${{ inputs.alpine-version }}
+    name: alpine-ros1-test / ${{ inputs.ros-distro }}-${{ inputs.alpine-version }}
     runs-on: ubuntu-latest
     env:
       APORTS_DIR: /tmp/abuild/aports
@@ -248,7 +248,6 @@ jobs:
           key: abuild-cache-${{ inputs.ros-distro }}-${{ inputs.alpine-version }}-${{ github.sha }}
 
   hide-old-bot-comments:
-    name: Hide old bot comments
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false && inputs.enable-bot-comment
     steps:
