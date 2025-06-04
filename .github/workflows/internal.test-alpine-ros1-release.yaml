@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  alpine-ros1-release:
+  test:
     uses: ./.github/workflows/alpine-ros1-release.yaml
     with:
       source-repo-slug: alpine-ros/sample-ros-pkg
