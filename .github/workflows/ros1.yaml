@@ -17,7 +17,7 @@ on:
       bot-comment-api-base:
         description: "GitHub API base URL to post a bot comment"
         type: string
-        default: false
+        default: ""
       enable-codecov:
         description: "Upload coverage report to Codecov"
         type: boolean
