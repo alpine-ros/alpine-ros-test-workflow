@@ -22,6 +22,10 @@ on:
         description: "Upload coverage report to Codecov"
         type: boolean
         default: false
+      abuild-env:
+        description: "Environment variables applied to abuild container"
+        type: string
+        default: ""
       repository:
         description: "Repository slug to checkout. Mainly for internal testing"
         type: string
@@ -77,9 +81,12 @@ jobs:
 
       - name: Test
         id: test
+        env:
+          ABUILD_ENV: ${{ inputs.abuild-env }}
         run: |
-          mkdir -p .github/workflows/
-          touch .github/workflows/abuild.env
+          env_file=$(mktemp)
+          printenv ABUILD_ENV >${env_file}
+
           mkdir -p ${APORTS_DIR} ${BUILD_LOG_DIR} ${ROS_LOG_DIR} ${BUILD_CACHE_DIR} ${GCOV_DIR}
           chmod -R a+rw ${APORTS_DIR} ${BUILD_LOG_DIR} ${ROS_LOG_DIR} ${BUILD_CACHE_DIR} ${GCOV_DIR}
           docker run --rm \
@@ -92,7 +99,7 @@ jobs:
             -e ROS_HOSTNAME=localhost \
             -e CFLAGS=-coverage \
             -e CXXFLAGS=-coverage \
-            --env-file .github/workflows/abuild.env \
+            --env-file ${env_file} \
             -v $(pwd):/src/$(basename $(pwd)):ro \
             -v ${APORTS_DIR}:/aports \
             -v ${BUILD_LOG_DIR}:/logs \
