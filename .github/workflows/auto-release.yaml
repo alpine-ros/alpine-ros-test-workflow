@@ -1,9 +1,18 @@
+# Detects version update in package.xml and automatically create Git tag and GitHub Release.
+# The workflow must be called by the following condition:
+#
+# on:
+#   push:
+#     branches:
+#       - DEFAULT_BRANCH_NAME
+
 name: ROS package auto release workflow
 on:
   workflow_call:
     secrets:
       token:
-        required: false
+        description: "GitHub token to push Git tag and open PR"
+        required: true
 
 jobs:
   release:

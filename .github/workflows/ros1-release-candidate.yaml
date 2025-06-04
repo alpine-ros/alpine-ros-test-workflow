@@ -1,0 +1,64 @@
+# Create release candidate PR which updates CHANGELOG.rst and package.xml.
+
+name: ROS 1 package release candidate workflow
+  workflow_call:
+    inputs:
+      release-title:
+        description: "Release version infomation in format of 'Release 0.0.0'"
+        type: string
+        required: true
+      branch:
+        description: "Base branch to create a release"
+        type: string
+        default: ""
+      git-user:
+        description: "Git user to create release candidate PR"
+        type: string
+        required: true
+      git-email:
+        description: "Git email to create release candidate PR"
+        type: string
+        required: true
+      pr-body:
+        description: "PR body text"
+        type: string
+        default: ""
+      pr-assignee:
+        description: "PR assignee"
+        type: string
+        required: true
+    secrets:
+      token:
+        description: "GitHub token to open release candidate PR"
+        required: true
+
+jobs:
+  release-candidate:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.issue.title, 'Release ')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+      - name: Create release candidate
+        id: create-release
+        uses: at-wat/catkin-release-action@v1
+        with:
+          issue_title: ${{ inputs.release-title }}
+          git_user: alpine-ros-bot
+          git_email: 214657941+alpine-ros-bot@users.noreply.github.com
+          github_token: ${{ secrets.token }}
+      - name: open pull-request
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
+          BRANCH: ${{ inputs.branch }}
+          PR_BODY: ${{ inputs.body }}
+          PR_ASSIGNEE: ${{ inputs.pr-assignee }}
+        run: |
+          gh pr create \
+            --base ${BRANCH} \
+            --head ${{ steps.create-release.outputs.created_branch }} \
+            --title "Release "${{ steps.create-release.outputs.version }} \
+            --body "${PR_BODY}" \
+            --assignee "${PR_ASSIGNEE}"
