@@ -57,6 +57,8 @@ jobs:
         with:
           repository: ${{ inputs.source-repo-slug }}
           ref: ${{ inputs.release-ref }}
+          persist-credentials: false
+          fetch-depth: 0
       - name: Setup gitconfig
         id: gitconfig
         env:
