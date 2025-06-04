@@ -1,4 +1,4 @@
-name: test
+name: Alpine ROS 1 test workflow
 on:
   workflow_call:
     inputs:
@@ -29,6 +29,7 @@ env:
 
 jobs:
   test:
+    name: Alpine ROS 1 test / ${{ inputs.ros-distro }}-${{ inputs.alpine-version }}
     runs-on: ubuntu-latest
     env:
       APORTS_DIR: /tmp/abuild/aports
