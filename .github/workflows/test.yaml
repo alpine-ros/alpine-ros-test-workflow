@@ -13,14 +13,14 @@ on:
       enable-bot-comment:
         required: true
         default: false
-        type: bool
+        type: boolean
       bot-comment-api-base:
         required: false
         type: string
       enable-codecov:
         required: true
         default: false
-        type: bool
+        type: boolean
     secrets:
       bot-comment-token:
         required: false
