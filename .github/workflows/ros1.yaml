@@ -241,6 +241,7 @@ jobs:
           key: abuild-cache-${{ inputs.ros-distro }}-${{ inputs.alpine-version }}-${{ github.sha }}
 
   hide-old-bot-comments:
+    name: Hide old bot comments
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false && inputs.enable-bot-comment
     steps:
