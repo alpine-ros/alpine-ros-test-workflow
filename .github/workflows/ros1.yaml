@@ -130,7 +130,7 @@ jobs:
               title=":x: Failed"
               ;;
           esac
-          gh-pr-comment "[${build_link}] ${title} ${ROS_DISTRO} ${ALPINE_VERSION}" \
+          gh-pr-comment "${title} ${ROS_DISTRO} ${ALPINE_VERSION} [${build_link}]" \
             "<details><summary>Log summary</summary>
 
           $(cat ${BUILD_LOG_DIR}/summary.log)
@@ -251,9 +251,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false && inputs.enable-bot-comment
     steps:
+      - name: Escape version string
+        id: escaped
+        run: echo 'alpine-version=${{ inputs.alpine-version }}' | sed 's/\./\\\\./' >> ${GITHUB_OUTPUT}
       - name: Hide old bot comments
         uses: kamatama41/hide-pr-comments-action@v0
         with:
           github_token: ${{ github.token }}
-          message_regex: "## \\[\\S*\\] \\S* (Passed|Failed) "
-
+          message_regex: "## (:white_check_mark: Passed|:x: Failed) ${{ inputs.ros-distro }} ${{ steps.escaped.outputs.alpine-version }}"
