@@ -15,6 +15,7 @@ on:
         default: false
         type: boolean
       bot-comment-api-base:
+        required: true
         required: false
         type: string
       enable-codecov:
@@ -24,7 +25,6 @@ on:
     secrets:
       bot-comment-token:
         required: false
-        default: ${{ github.token }}
       codecov-upload-token:
         required: false
 
