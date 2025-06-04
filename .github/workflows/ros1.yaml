@@ -238,3 +238,14 @@ jobs:
         with:
           path: ${{ env.BUILD_CACHE_DIR }}
           key: abuild-cache-${{ inputs.ros-distro }}-${{ inputs.alpine-version }}-${{ github.sha }}
+
+  hide-old-bot-comments:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false && inputs.enable-bot-comment
+    steps:
+      - name: Hide old bot comments
+        uses: kamatama41/hide-pr-comments-action@v0
+        with:
+          github_token: ${{ github.token }}
+          message_regex: "## \\[\\S*\\] \\S* (Passed|Failed) "
+
