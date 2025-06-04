@@ -1,0 +1,137 @@
+# Release ROS 1 package to Alpine ROS.
+
+name: Alpine ROS 1 release workflow
+on:
+  workflow_call:
+    inputs:
+      ros-distro:
+        description: "ROS distribution name"
+        type: string
+        default: noetic
+      source-repo-slug:
+        description: "Package repository slug"
+        type: string
+        default: ${{ github.repository }}
+      release-ref:
+        description: "Repository ref to create release"
+        type: string
+        required: true
+      release-repo-slug:
+        description: "Release repository slug to push release data"
+        type: string
+        default: ${{ github.repository }}-release
+      rosdistro-fork-slug:
+        description: "Rosdistro repository slug to push PR branches. You need to fork alpine-ros/rosdistro1 beforehand"
+        type: string
+        default: ${{ github.repository_owner }}/rosdistro1
+      dry-run:
+        description: "Flag to run in dry-run mode"
+        type: boolean
+        default: true
+      git-user:
+        description: "Git user name to commit release data nad rosdistro update"
+        type: string
+        required: true
+      git-email:
+        description: "Git email to commit release data nad rosdistro update"
+        type: string
+        required: true
+      repository:
+        description: "Repository slug to checkout. Mainly for internal testing"
+        type: string
+        default: ${{ github.repository }}
+      action-ref:
+        description: "Git ref of alpine-ros-ci-workflows repository. Mainly for testing"
+        type: string
+        default: main
+    secrets:
+      token:
+        description: "GitHub Token to push release data and open PR"
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.source-repo-slug }}
+          ref: ${{ inputs.release-ref }}
+      - name: Setup gitconfig
+        id: gitconfig
+        env:
+          GIT_USER: ${{ inputs.git-user }}
+          GIT_EMAIL: ${{ inputs.git-email }}
+        run: |
+          if [ -f ${HOME}/.gitconfig ]; then
+            file=$(mktemp --dry-run)
+            mv ${HOME}/.gitconfig ${file}
+            echo "path=${file}" >>${GITHUB_OUTPUT}
+          fi
+          git config --global user.name "${GIT_USER}"
+          git config --global user.email "${GIT_EMAIL}"
+      - name: Setup netrc
+        id: netrc
+        env:
+          TOKEN: ${{ inputs.token }}
+        run: |
+          if [ -f ${HOME}/.netrc ]; then
+            file=$(mktemp --dry-run)
+            mv ${HOME}/.netrc ${file}
+            echo "path=${file}" >>${GITHUB_OUTPUT}
+          fi
+          cat <<EOS >${HOME}/.netrc
+          machine github.com
+          login git
+          password ${TOKEN}
+          machine api.github.com
+          login git
+          password ${TOKEN}
+          EOS
+      - name: Release
+        env:
+          ACTION_REF: ${{ inputs.action-ref }}
+          ROS_DISTRO: ${{ inputs.ros-distro }}
+          SOURCE_REPO_SLUG: ${{ inputs.source-repo-slug }}
+          RELEASE_REPO_SLUG: ${{ inputs.release-repo-slug }}
+          ROSDISTRO_FORK_SLUG: ${{ inputs.rosdistro-fork-slug }}
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          action_dir=$(mktemp -d)
+          git clone --depth=1 \
+            -b ${ACTION_REF} \
+            https://github.com/alpine-ros/alpine-ros-ci-workflows.git ${action_dir}
+
+          key=
+          case ${DRY_RUN} in
+            false) key=y;;
+            true) key=s;;
+            *)
+              echo "Unknown DRY_RUN value ${DRY_RUN}" >&2
+              exit 1
+              ;;
+          esac
+
+          (yes ${key} || true) | ${action_dir}/scripts/alpine-ros1-release.sh \
+            "${ROS_DISTRO}" \
+            "${SOURCE_REPO_SLUG}" \
+            "${RELEASE_REPO_SLUG}" \
+            "${ROSDISTRO_FORK_SLUG}"
+      - name: Restore netrc
+        if: always()
+        env:
+          BACKUP: ${{ steps.netrc.outputs.path }}
+        run: |
+          rm -f ${HOME}/.netrc
+          if [ -n "${BACKUP}" ]; then
+            mv ${BACKUP} ${HOME}/.netrc
+          fi
+      - name: Restore gitconfig
+        if: always()
+        env:
+          BACKUP: ${{ steps.gitconfig.outputs.path }}
+        run: |
+          rm -f ${HOME}/.gitconfig
+          if [ -n "${BACKUP}" ]; then
+            mv ${BACKUP} ${HOME}/.gitconfig
+          fi
