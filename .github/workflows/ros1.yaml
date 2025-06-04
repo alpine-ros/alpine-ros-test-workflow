@@ -78,6 +78,7 @@ jobs:
       - name: Test
         id: test
         run: |
+          mkdir -p .github/workflows/
           touch .github/workflows/abuild.env
           mkdir -p ${APORTS_DIR} ${BUILD_LOG_DIR} ${ROS_LOG_DIR} ${BUILD_CACHE_DIR} ${GCOV_DIR}
           chmod -R a+rw ${APORTS_DIR} ${BUILD_LOG_DIR} ${ROS_LOG_DIR} ${BUILD_CACHE_DIR} ${GCOV_DIR}
