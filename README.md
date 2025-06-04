@@ -1,4 +1,4 @@
-# alpine-ros/alpine-ros-test-workflow
+# alpine-ros/alpine-ros-ci-workflows
 
 GitHub Action workflow to test ROS package using Alpine ROS
 
@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   test:
-    uses: ./.github/workflows/ros1.yaml
+    uses: alpine-ros/alpine-ros-ci-workflows/.github/workflows/ros1.yaml@main
     with:
       enable-bot-comment: true
     secrets:
