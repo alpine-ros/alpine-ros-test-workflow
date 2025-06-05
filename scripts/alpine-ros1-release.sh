@@ -117,6 +117,7 @@ if !(git ls-remote origin ${ver_meta_pkg} | grep "${ver_meta_pkg}" > /dev/null);
   read -p "Push now (y/n)? " answer
   case ${answer:0:1} in
     y | Y)
+      echo "Pushing to source repository origin: ${ver_meta_pkg}"
       git push origin ${ver_meta_pkg}
       ;;
     *)
@@ -169,6 +170,7 @@ echo
 read -p "Push to ${release_repo} (y/n/s)? " answer
 case ${answer:0:1} in
   y | Y)
+    echo "Pushing to release repository ${release_repo}: ${push_targets}"
     git push ${release_repo} ${push_targets}
     ;;
   s | S)
@@ -238,6 +240,7 @@ case ${answer:0:1} in
     ;;
 esac
 
+echo "Pushing to rosdistro1 fork: ${release_branch_name}"
 git -C ${rosdistro_tmp} push fork ${release_branch_name}
 
 sleep 1
