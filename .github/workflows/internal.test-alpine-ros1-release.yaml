@@ -13,6 +13,7 @@ jobs:
     uses: ./.github/workflows/alpine-ros1-release.yaml
     with:
       source-repo-slug: alpine-ros/sample-ros-pkg
+      source-branch: main
       release-ref: 0.0.4
       release-repo-slug: alpine-ros/sample-ros-pkg-release
       git-user: alpine-ros-bot

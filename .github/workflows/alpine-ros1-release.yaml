@@ -12,6 +12,10 @@ on:
         description: "Package repository slug"
         type: string
         default: ${{ github.repository }}
+      source-branch:
+        description: "Package repository source branch"
+        type: string
+        required: true
       release-ref:
         description: "Repository ref to create release"
         type: string
@@ -93,6 +97,7 @@ jobs:
           SOURCE_REPO_SLUG: ${{ inputs.source-repo-slug }}
           RELEASE_REPO_SLUG: ${{ inputs.release-repo-slug }}
           ROSDISTRO_FORK_SLUG: ${{ inputs.rosdistro-fork-slug }}
+          SOURCE_BRANCH: ${{ inputs.source-branch }}
           DRY_RUN: ${{ inputs.dry-run }}
         run: |
           action_dir=$(mktemp -d)
@@ -114,4 +119,5 @@ jobs:
             "${ROS_DISTRO}" \
             "${SOURCE_REPO_SLUG}" \
             "${RELEASE_REPO_SLUG}" \
-            "${ROSDISTRO_FORK_SLUG}"
+            "${ROSDISTRO_FORK_SLUG}" \
+            "${SOURCE_BRANCH}"

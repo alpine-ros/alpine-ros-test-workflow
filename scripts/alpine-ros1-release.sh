@@ -12,9 +12,9 @@ rosdistro_repo=https://github.com/${rosdistro_repo_slug}.git
 rosdistro_repo_branch=${ROSDISTRO_REPO_BRANCH:-main}
 meta_package=${META_PACKAGE:-$(basename $(pwd))}
 
-if [ $# -lt 4 ]; then
+if [ $# -lt 5 ]; then
   cat <<EOS
-Usage: $(basename $0) ROS_DISTRO SOURCE_REPO_SLUG RELEASE_REPO_SLUG ROSDISTRO_FORK_SLUG [REVISION]
+Usage: $(basename $0) ROS_DISTRO SOURCE_REPO_SLUG RELEASE_REPO_SLUG ROSDISTRO_FORK_SLUG SOURCE_BRANCH [REVISION]
 
 Arguments:
   ROS_DISTRO:
@@ -51,7 +51,8 @@ ros_distro=$1
 source_repo=https://github.com/$2.git
 release_repo=https://github.com/$3.git
 rosdistro_fork_slug=$4
-rev=${5:-1}
+source_branch=$5
+rev=${6:-1}
 
 rosdistro_push_repo=https://github.com/${rosdistro_fork_slug}.git
 rosdistro_push_user=$(dirname ${rosdistro_fork_slug})
@@ -198,7 +199,7 @@ git -C ${rosdistro_tmp} remote add fork ${rosdistro_push_repo}
 
 ROS_DISTRO=${ros_distro} \
   SOURCE_REPO_URL=${source_repo} \
-  SOURCE_BRANCH=${base_branch} \
+  SOURCE_BRANCH=${source_branch} \
   RELEASE_REPO_URL=${release_repo} \
   PACKAGES=${packages} \
   python3 $(dirname $0)/update-distributions.py \
