@@ -60,28 +60,16 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: Setup gitconfig
-        id: gitconfig
         env:
           GIT_USER: ${{ inputs.git-user }}
           GIT_EMAIL: ${{ inputs.git-email }}
         run: |
-          if [ -f ${HOME}/.gitconfig ]; then
-            file=$(mktemp --dry-run)
-            mv ${HOME}/.gitconfig ${file}
-            echo "path=${file}" >>${GITHUB_OUTPUT}
-          fi
           git config --global user.name "${GIT_USER}"
           git config --global user.email "${GIT_EMAIL}"
       - name: Setup netrc
-        id: netrc
         env:
           TOKEN: ${{ inputs.token }}
         run: |
-          if [ -f ${HOME}/.netrc ]; then
-            file=$(mktemp --dry-run)
-            mv ${HOME}/.netrc ${file}
-            echo "path=${file}" >>${GITHUB_OUTPUT}
-          fi
           cat <<EOS >${HOME}/.netrc
           machine github.com
           login git
@@ -119,21 +107,3 @@ jobs:
             "${SOURCE_REPO_SLUG}" \
             "${RELEASE_REPO_SLUG}" \
             "${ROSDISTRO_FORK_SLUG}"
-      - name: Restore netrc
-        if: always()
-        env:
-          BACKUP: ${{ steps.netrc.outputs.path }}
-        run: |
-          rm -f ${HOME}/.netrc
-          if [ -n "${BACKUP}" ]; then
-            mv ${BACKUP} ${HOME}/.netrc
-          fi
-      - name: Restore gitconfig
-        if: always()
-        env:
-          BACKUP: ${{ steps.gitconfig.outputs.path }}
-        run: |
-          rm -f ${HOME}/.gitconfig
-          if [ -n "${BACKUP}" ]; then
-            mv ${BACKUP} ${HOME}/.gitconfig
-          fi
