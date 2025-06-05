@@ -89,7 +89,7 @@ jobs:
         run: |
           action_dir=$(mktemp -d)
           git clone --depth=1 \
-            -b ${ACTION_REF} \
+            -b ${ACTION_REF:-main} \
             https://github.com/alpine-ros/alpine-ros-ci-workflows.git ${action_dir}
 
           key=
