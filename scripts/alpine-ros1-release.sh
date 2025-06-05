@@ -140,6 +140,9 @@ for m in ${manifests}; do
   git checkout ${ver_meta_pkg} 2>/dev/null
   git checkout --orphan ${branch}
 
+  # Exclude workflow files to avoid requiring 'workflow' scope token
+  rm -rf .github/workflows || true
+
   if [ ${dir} != "." ]; then
     echo "Extracting sub-directory"
     tmpdir=$(mktemp -d)
