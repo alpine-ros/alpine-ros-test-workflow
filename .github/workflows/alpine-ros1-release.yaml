@@ -46,8 +46,11 @@ on:
         default: main
     secrets:
       token:
-        description: "GitHub Token to push release data and open PR"
+        description: "GitHub Token to push to package release repo and rosdistro1 fork"
         required: true
+      token-pr:
+        description: "GitHub Token to open PR to rosdistro1. If not set, 'token' will be used"
+        required: false
 
 jobs:
   alpine-ros1-release:
@@ -69,6 +72,7 @@ jobs:
       - name: Setup netrc
         env:
           TOKEN: ${{ secrets.token }}
+          TOKEN_PR: ${{ secrets.token-pr }}
         run: |
           if [ -z "${TOKEN}" ]; then
             echo "token is empty" >&2
@@ -80,7 +84,7 @@ jobs:
           password ${TOKEN}
           machine api.github.com
           login git
-          password ${TOKEN}
+          password ${TOKEN_PR:-${TOKEN}}
           EOS
       - name: Release
         env:
