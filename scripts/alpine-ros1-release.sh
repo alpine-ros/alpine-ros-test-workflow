@@ -115,6 +115,7 @@ fi
 if !(git ls-remote origin ${ver_meta_pkg} | grep "${ver_meta_pkg}" > /dev/null); then
   echo "Release tag is not yet pushed."
   read -p "Push now (y/n)? " answer
+  echo
   case ${answer:0:1} in
     y | Y)
       git push origin ${ver_meta_pkg}
@@ -167,6 +168,7 @@ echo "${push_targets}" | xargs -n1 echo | sed "s/^/- /"
 echo
 
 read -p "Push to ${release_repo} (y/n/s)? " answer
+echo
 case ${answer:0:1} in
   y | Y)
     git push ${release_repo} ${push_targets}
@@ -226,6 +228,7 @@ echo "PR: ${pr_request_body}"
 echo
 
 read -p "Push ${release_branch_name} to ${rosdistro_push_repo} and open a pull request (y/n/s)? " answer
+echo
 case ${answer:0:1} in
   y | Y) ;;
   s | S)
