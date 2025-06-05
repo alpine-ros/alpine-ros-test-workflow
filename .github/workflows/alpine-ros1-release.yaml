@@ -68,7 +68,7 @@ jobs:
           git config --global user.email "${GIT_EMAIL}"
       - name: Setup netrc
         env:
-          TOKEN: ${{ inputs.token }}
+          TOKEN: ${{ secrets.token }}
         run: |
           if [ -z "${TOKEN}" ]; then
             echo "token is empty" >&2
