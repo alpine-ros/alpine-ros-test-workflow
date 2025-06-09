@@ -24,6 +24,14 @@ on:
         description: "Release repository slug to push release data"
         type: string
         default: ${{ github.repository }}-release
+      rosdistro-repo-slug:
+        description: "Upstream rosdistro repository slug"
+        type: string
+        default: alpine-ros/rosdistro1
+      rosdistro-repo-branch:
+        description: "Upstream rosdistro repository branch"
+        type: string
+        default: main
       rosdistro-fork-slug:
         description: "Rosdistro repository slug to push PR branches. You need to fork alpine-ros/rosdistro1 beforehand"
         type: string
@@ -96,6 +104,8 @@ jobs:
           ROS_DISTRO: ${{ inputs.ros-distro }}
           SOURCE_REPO_SLUG: ${{ inputs.source-repo-slug }}
           RELEASE_REPO_SLUG: ${{ inputs.release-repo-slug }}
+          ROSDISTRO_REPO_SLUG: ${{ inputs.rosdistro-repo-slug }}
+          ROSDISTRO_REPO_BRANCH: ${{ inputs.rosdistro-repo-branch }}
           ROSDISTRO_FORK_SLUG: ${{ inputs.rosdistro-fork-slug }}
           SOURCE_BRANCH: ${{ inputs.source-branch }}
           DRY_RUN: ${{ inputs.dry-run }}
