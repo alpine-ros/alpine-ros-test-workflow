@@ -16,6 +16,7 @@ jobs:
       source-branch: main
       release-ref: 0.0.4
       release-repo-slug: alpine-ros/sample-ros-pkg-release
+      rosdistro-fork-slug: alpine-ros-bot/rosdistro1
       git-user: alpine-ros-bot
       git-email: 214657941+alpine-ros-bot@users.noreply.github.com
       action-ref: ${{ github.head_ref }}
