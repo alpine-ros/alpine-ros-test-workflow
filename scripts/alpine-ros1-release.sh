@@ -191,6 +191,25 @@ echo "=============================="
 echo "Preparing rosdistro update:"
 echo
 
+if [ "${rosdistro_repo}" != ${rosdistro_push_repo} ]; then
+  read -p "Sync ${release_push_repo} (y/n/s)? " answer
+  case ${answer:0:1} in
+    y | Y)
+      curl \
+        https://api.github.com/repos/${rosdistro_push_repo}/merge-upstream \
+        -d "{\"branch\":\"${rosdistro_repo_branch}\"}" \
+        -XPOST -n
+      ;;
+    s | S)
+      echo "Skipped"
+      ;;
+    *)
+      echo "Aborted"
+      exit 1
+      ;;
+  esac
+fi
+
 rosdistro_tmp=$(mktemp -d)
 trap "{ rm -rf ${rosdistro_tmp}; }" EXIT
 
