@@ -195,10 +195,9 @@ if [ "${rosdistro_repo_slug}" != ${rosdistro_fork_slug} ]; then
   read -p "Sync ${rosdistro_fork_slug} (y/n/s)? " answer
   case ${answer:0:1} in
     y | Y)
-      curl \
-        https://api.github.com/repos/${rosdistro_fork_slug}/merge-upstream \
-        -d "{\"branch\":\"${rosdistro_repo_branch}\"}" \
-        -XPOST -n
+      GH_TOKEN=${GITHUB_TOKEN} gh api \
+        -X POST /repos/${rosdistro_fork_slug}/merge-upstream \
+        -f branch="${rosdistro_repo_branch}"
       ;;
     s | S)
       echo "Skipped"
@@ -268,7 +267,9 @@ git -C ${rosdistro_tmp} push fork ${release_branch_name}
 
 sleep 1
 
-curl https://api.github.com/repos/${rosdistro_repo_slug}/pulls -d "${pr_request_body}" -XPOST -n \
+echo "${pr_request_body}" | GH_TOKEN=${GITHUB_TOKEN_PR:-${GITHUB_TOKEN}} gh api \
+  -X POST /repos/${rosdistro_repo_slug}/pulls \
+  --input - \
   || (
     echo "Failed to open a pull request. GitHub personal access token for api.github.com is not set up." >&2
     echo "Please manually open the pull request." >%2
