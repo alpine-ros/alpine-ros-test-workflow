@@ -192,7 +192,7 @@ echo "Preparing rosdistro update:"
 echo
 
 if [ "${rosdistro_repo}" != ${rosdistro_push_repo} ]; then
-  read -p "Sync ${release_push_repo} (y/n/s)? " answer
+  read -p "Sync ${rosdistro_push_repo} (y/n/s)? " answer
   case ${answer:0:1} in
     y | Y)
       curl \
