@@ -196,7 +196,7 @@ if [ "${rosdistro_repo_slug}" != ${rosdistro_fork_slug} ]; then
   case ${answer:0:1} in
     y | Y)
       GH_TOKEN=${GITHUB_TOKEN} gh api \
-        -X POST /repos/${rosdistro_fork_slug}/merge-upstream \
+        -X POST repos/${rosdistro_fork_slug}/merge-upstream \
         -f branch="${rosdistro_repo_branch}"
       ;;
     s | S)
@@ -268,7 +268,7 @@ git -C ${rosdistro_tmp} push fork ${release_branch_name}
 sleep 1
 
 echo "${pr_request_body}" | GH_TOKEN=${GITHUB_TOKEN_PR:-${GITHUB_TOKEN}} gh api \
-  -X POST /repos/${rosdistro_repo_slug}/pulls \
+  -X POST repos/${rosdistro_repo_slug}/pulls \
   --input - \
   || (
     echo "Failed to open a pull request. GitHub personal access token for api.github.com is not set up." >&2
