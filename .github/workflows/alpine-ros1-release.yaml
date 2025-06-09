@@ -94,9 +94,6 @@ jobs:
           machine github.com
           login git
           password ${TOKEN}
-          machine api.github.com
-          login git
-          password ${TOKEN_PR:-${TOKEN}}
           EOS
       - name: Release
         env:
@@ -109,6 +106,8 @@ jobs:
           ROSDISTRO_FORK_SLUG: ${{ inputs.rosdistro-fork-slug }}
           SOURCE_BRANCH: ${{ inputs.source-branch }}
           DRY_RUN: ${{ inputs.dry-run }}
+          GITHUB_TOKEN: ${{ secrets.token }}
+          GITHUB_TOKEN_PR: ${{ secrets.token-pr }}
         run: |
           action_dir=$(mktemp -d)
           git clone --depth=1 \
