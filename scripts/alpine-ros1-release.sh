@@ -191,12 +191,12 @@ echo "=============================="
 echo "Preparing rosdistro update:"
 echo
 
-if [ "${rosdistro_repo}" != ${rosdistro_push_repo} ]; then
-  read -p "Sync ${rosdistro_push_repo} (y/n/s)? " answer
+if [ "${rosdistro_repo_slug}" != ${rosdistro_fork_slug} ]; then
+  read -p "Sync ${rosdistro_fork_slug} (y/n/s)? " answer
   case ${answer:0:1} in
     y | Y)
       curl \
-        https://api.github.com/repos/${rosdistro_push_repo}/merge-upstream \
+        https://api.github.com/repos/${rosdistro_fork_slug}/merge-upstream \
         -d "{\"branch\":\"${rosdistro_repo_branch}\"}" \
         -XPOST -n
       ;;
