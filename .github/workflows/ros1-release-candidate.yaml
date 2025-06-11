@@ -36,12 +36,16 @@ on:
       pr-branch:
         description: "Created release candidate PR branch"
         value: ${{ jobs.release-candidate.outputs.pr-branch }}
+      version:
+        description: "Created release candidate version"
+        value: ${{ jobs.release-candidate.outputs.version }}
 
 jobs:
   release-candidate:
     runs-on: ubuntu-latest
     outputs:
       pr-branch: ${{ steps.create-release.outputs.created_branch }}
+      version: ${{ steps.create-release.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
