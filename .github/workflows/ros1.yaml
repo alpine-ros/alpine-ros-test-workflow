@@ -34,6 +34,10 @@ on:
         description: "Repository ref to checkout. Mainly for internal testing"
         type: string
         default: ""
+      internal-dryrun-codecov:
+        description: "[internal] Process coverage report but do not upload. For internal testing"
+        type: boolean
+        default: false
     secrets:
       bot-comment-token:
         required: false
@@ -139,7 +143,7 @@ jobs:
           "
 
       - name: Process coverage reports
-        if: ${{ inputs.enable-codecov }}
+        if: inputs.enable-codecov
         env:
           COVERAGE_PROCESSOR: |
             #!/bin/sh
@@ -164,6 +168,11 @@ jobs:
               gcno=${APORTS_DIR}/${ROS_DISTRO}/${pkg}/abuild/build_isolated/${rel_path%.gcda}.gcno
               new_gcno=${new_gcda%.gcda}.gcno
 
+              if [ ! -f ${gcno} ]; then
+                echo "- skipping gcda without gcno: ${rel_path}"
+                continue
+              fi
+
               mkdir -p $(dirname ${new_gcda})
               cp ${gcda} ${new_gcda}
               cp ${gcno} ${new_gcno}
@@ -180,6 +189,11 @@ jobs:
               new_gcda=${rel_path}
               gcno=${gcda%.gcda}.gcno
               new_gcno=${new_gcda%.gcda}.gcno
+
+              if [ ! -f ${gcno} ]; then
+                echo "- skipping gcda without gcno: ${rel_path}"
+                continue
+              fi
 
               mkdir -p $(dirname ${new_gcda})
               cp ${gcda} ${new_gcda}
@@ -229,7 +243,7 @@ jobs:
             ghcr.io/alpine-ros/ros-abuild:${ALPINE_VERSION}-${ROS_DISTRO}
 
       - uses: codecov/codecov-action@v5
-        if: ${{ inputs.enable-codecov }}
+        if: inputs.enable-codecov && inputs.internal-dryrun-codecov != true
         with:
           token: ${{ secrets.codecov-upload-token }}
 

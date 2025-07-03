@@ -17,5 +17,7 @@ jobs:
     with:
       enable-bot-comment: true
       repository: alpine-ros/sample-ros-pkg
+      enable-codecov: true
+      internal-dryrun-codecov: true
     secrets:
       bot-comment-token: ${{ secrets.GITHUB_TOKEN }}
