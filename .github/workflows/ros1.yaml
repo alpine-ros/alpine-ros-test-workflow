@@ -164,6 +164,11 @@ jobs:
               gcno=${APORTS_DIR}/${ROS_DISTRO}/${pkg}/abuild/build_isolated/${rel_path%.gcda}.gcno
               new_gcno=${new_gcda%.gcda}.gcno
 
+              if [ ! -f ${gcno} ]; then
+                echo "- skipping gcda without gcno: ${rel_path}"
+                continue
+              fi
+
               mkdir -p $(dirname ${new_gcda})
               cp ${gcda} ${new_gcda}
               cp ${gcno} ${new_gcno}
@@ -180,6 +185,11 @@ jobs:
               new_gcda=${rel_path}
               gcno=${gcda%.gcda}.gcno
               new_gcno=${new_gcda%.gcda}.gcno
+
+              if [ ! -f ${gcno} ]; then
+                echo "- skipping gcda without gcno: ${rel_path}"
+                continue
+              fi
 
               mkdir -p $(dirname ${new_gcda})
               cp ${gcda} ${new_gcda}
