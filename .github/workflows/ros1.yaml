@@ -34,6 +34,10 @@ on:
         description: "Repository ref to checkout. Mainly for internal testing"
         type: string
         default: ""
+      internal-dryrun-codecov:
+        description: "[internal] Process coverage report but do not upload"
+        type: boolean
+        default: false
     secrets:
       bot-comment-token:
         required: false
@@ -239,7 +243,7 @@ jobs:
             ghcr.io/alpine-ros/ros-abuild:${ALPINE_VERSION}-${ROS_DISTRO}
 
       - uses: codecov/codecov-action@v5
-        if: ${{ inputs.enable-codecov }}
+        if: ${{ inputs.enable-codecov }} && ${{ inputs.internal-dryrun-codecov }} != 'true'
         with:
           token: ${{ secrets.codecov-upload-token }}
 
