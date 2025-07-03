@@ -143,7 +143,7 @@ jobs:
           "
 
       - name: Process coverage reports
-        if: ${{ inputs.enable-codecov }}
+        if: inputs.enable-codecov
         env:
           COVERAGE_PROCESSOR: |
             #!/bin/sh
@@ -243,7 +243,7 @@ jobs:
             ghcr.io/alpine-ros/ros-abuild:${ALPINE_VERSION}-${ROS_DISTRO}
 
       - uses: codecov/codecov-action@v5
-        if: ${{ inputs.enable-codecov }} && ${{ inputs.internal-dryrun-codecov }} != 'true'
+        if: inputs.enable-codecov && inputs.internal-dryrun-codecov != 'true'
         with:
           token: ${{ secrets.codecov-upload-token }}
 
